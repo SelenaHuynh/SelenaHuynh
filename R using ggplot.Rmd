@@ -1,0 +1,127 @@
+---
+title: "A1-6-ggplot"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 1
+
+In the `ggplot2` package there is a dataset called `diamonds`. This is a dataset that contains data for the 4 `C's that determine the quality of diamonds. `cut`, `color`, `clarity` and `carat`. It also includes the price or each of them. 
+
+Using `ggplot2` you can express the relationships evident in the dataset by using appropriate commentary and visualisations. Make sure you describe the relationships you see in particular graphs in detail and relate them back to the dataset’s intent. 
+
+Use a series of graphs to describe what to look for when choosing diamonds e.g., "Bar Chart", histogram", "scatterplot", and add the geometric object- the visualization itself! Use multiple code chunks to separate each graphing operation. Use text to explain what you are looking for in the data, and to describe your findings. There's no right answer precisely, but a response that can tell the story of the data and help us find out the important factors to note when valuing diamonds will be marked more highly than other responses.
+ 
+
+```{r}
+
+# Write your code and your comments here.
+library(ggplot2)
+data.frame(diamonds)
+summary(diamonds)
+```
+```{r}
+# Create a bar chart for the frequency of each cut
+ggplot(diamonds, aes(x = cut)) +
+  geom_bar(fill = "deepskyblue", color = "black") +
+  labs(title = "Frequency of Diamond Cuts",
+       x = "Cut", y = "Frequency") +
+  theme_minimal()
+```
+```{r}
+# Histogram for carat distribution
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(binwidth = 0.1, fill = "lightblue", color = "black") +
+  labs(title = "Carat Weight Distribution",
+       x = "Carat Weight", y = "Frequency") +
+  theme_minimal()
+```
+
+```{r}
+# Scatter plot for carat vs. price
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.3, color = "lightblue") +
+  labs(title = "Carat vs. Price",
+       x = "Carat Weight", y = "Price") +
+  theme_minimal()
+```
+```{r}
+# Create a box plot for diamond prices by color
+ggplot(diamonds, aes(x = color, y = price, fill = color)) +
+  geom_boxplot() +
+  labs(title = "Price Distribution by Color",
+       x = "Color", y = "Price") +
+  theme_minimal()
+```
+
+
+# Question 2
+
+In this exercise you will explores a dataset containing the human development index (HDI) and corruption perception index (CPI) of 173 countries across 6 different regions around the world: Americas, Asia Pacific, Eastern Europe and Central Asia (East EU Cemt), Western Europe (EU W. Europe), Middle East and North Africa and Noth Africa (MENA), and Sub-Saharan Africa (SSA). (Note: the larger CPI is, the less corrupted the country is perceived to be). Now, you will require to give the following questions answer.
+
+1.	Load the dataset, make it accessible as an R data frame and describe the data frame.
+2.	Explore the relationship between human development index (HDI) and corruption perception index (CPI) with a scatter plot.
+3.	Show the distribution of HDI in each region using density plot and histogram
+4.	Show the distribution of HDI in each region using a box plot. 
+
+
+```{r}
+
+install.packages("readr")
+library(readr)
+
+# Define the URL of the dataset
+url <- "https://raw.githubusercontent.com/nt246/NTRES6940-data-science/master/datasets/EconomistData.csv"
+
+# Read the dataset from the URL
+country <- read_csv(url)
+
+# Check the first few rows of the imported dataset
+head(country)
+
+```
+```{r}
+# Create a scatter plot of HDI vs. CPI
+ggplot(country, aes(x = HDI, y = CPI)) +
+  geom_point(size = 3, color = "blue") +
+  labs(title = "Scatter Plot of HDI vs. CPI",
+       x = "Human Development Index (HDI)",
+       y = "Corruption Perception Index (CPI)") +
+  theme_minimal()
+
+```
+
+```{r}
+# Histogram for HDI distribution in each region 
+ggplot(country, aes(x = HDI)) +
+  geom_histogram(binwidth = 0.05, fill = "lightblue", color = "black") +
+  facet_wrap(~ Region, ncol = 2) +  # Create separate histograms for each region
+  labs(title = "Distribution of HDI in Each Region",
+       x = "Human Development Index (HDI)",
+       y = "Frequency") +
+  theme_minimal()
+```
+```{r}
+# Create a density plot for HDI by region
+ggplot(country, aes(x = HDI, fill = Region)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plot of HDI by Region",
+       x = "Human Development Index (HDI)") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+
+```{r}
+
+# Create a box plot for the distribution of HDI by region
+ggplot(country, aes(x = Region, y = HDI, fill = Region)) +
+  geom_boxplot() +
+  labs(title = "HDI Distribution by Region",
+       x = "Region", y = "HDI") +
+  theme_minimal()
+```
+
