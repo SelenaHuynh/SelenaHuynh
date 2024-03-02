@@ -1,0 +1,337 @@
+---
+title: "Asm2"
+author: "Minh Phuong Huynh"
+date: "2023-11-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+
+# Load the diamond dataset
+diabetes <- read.csv('C:/Users/matth/Downloads/diabetes.csv')
+diabetes
+
+#Check for missing value
+missing_value <- colSums(is.na(diabetes))
+missing_value
+sum(missing_value)
+
+#Check for number of rows and columns
+dimensions_diabetes <- dim(diabetes)
+dimensions_diabetes
+```
+
+```{r}
+# Write takes a mean of every column of a dataframe made of numeric values.
+numeric_column <- diabetes[sapply(diabetes, is.numeric)]
+numeric_column
+
+column_mean <- colMeans(numeric_column)
+column_mean
+```
+
+```{r}
+# Load necessary libraries
+library(shiny)
+library(ggplot2)
+
+
+# Define UI
+ui <- fluidPage(
+  headerPanel("Data Visualization of Pima Indians Diabetes Dataset"),
+  pageWithSidebar(
+    headerPanel("Analysis of Pima Indians Diabetes Dataset"),
+    sidebarPanel(
+      h4(' The variables are as follows:'),
+      h6('1.    Pregnancies : Number of times pregnant'),
+      h6('2.    Glucose     : Plasma glucose concentration'),
+      h6('3.    Blood Pressure: Diastolic blood pressure'),
+      h6('4.    Skin Thickness: Triceps skinfold thickness'),
+      h6('5.    Insulin     : 2-Hour serum insulin'),
+      h6('6.    BMI         : Body mass index'),
+      h6('7.    Diabetes Pedigree Function: Diabetes pedigree function'),
+      h6('8.    Age         : Age in years'),
+      h6('9.    Outcome     : Binary variable indicating diabetes (1) or not (0)'),
+      br(),
+
+      checkboxGroupInput('plotTypes', 'Select Plot Types', 
+                         choices = c('Scatter Plot', 'Histogram', 'Bar Chart', 'Density Plot', 'Box Plot'),
+                         selected = 'Scatter Plot'),
+      br(),
+      h4(' Select different parameters:'),
+      sliderInput('sampleSize', 'Sample Size', min = 1, max = nrow(diabetes),
+                  value = min(500, nrow(diabetes)), step = 100, round = 0),
+      selectInput('x', 'X Axis Measure', names(diabetes)),
+      selectInput('y', 'Y Axis Measure', names(diabetes)[-9]),
+      selectInput('color', 'Measure Color', c('None', names(diabetes)),
+                  names(diabetes)[[9]]),
+      textInput('caption', 'Plot Caption', value = 'Plot on Pima Indians Diabetes Dataset')
+    ),
+    mainPanel(
+      h4('Introduction & How to use'),
+      p("This dataset contains information on various health attributes and diabetes outcomes of Pima Indians."),
+      br(),
+      h4('Interactive Data Visualization'),
+      p("This Shiny application allows dynamic adjustment of plot attributes to generate visual representations of the relationships between health metrics and diabetes outcomes."),
+      br(),
+      plotOutput('plot')
+    )
+  )
+)
+
+# Function to generate plots
+generatePlot <- function(data, x, y, color, plotType, caption) {
+  if (plotType == 'Scatter Plot') {
+    ggplot(data, aes_string(x = x, y = y)) + geom_point(shape = 15, size = 3) +
+      aes_string(color = color) +
+      ggtitle(caption)
+  } else if (plotType == 'Histogram') {
+    ggplot(data, aes_string(x = x)) +
+      geom_histogram(binwidth = 1, fill = "pink", color = "black", alpha = 0.7) +
+      ggtitle(paste("Histogram of", x)) +
+      theme_minimal()
+  } else if (plotType == 'Bar Chart') {
+    ggplot(data, aes_string(x = x, fill = color)) +
+      geom_bar() +
+      ggtitle(paste("Bar Chart of", x)) +
+      theme_minimal()
+  } else if (plotType == 'Density Plot') {
+    ggplot(data, aes_string(x = x, fill = color)) +
+      geom_density() +
+      ggtitle(paste("Density Plot of", x)) +
+      scale_fill_brewer(palette = "Set 2")
+  } else if (plotType == 'Box Plot') {
+    ggplot(data, aes_string(x = x, y = y, fill = "Outcome")) +
+      geom_boxplot() +
+      ggtitle(paste("Box Plot of", y, "by Outcome", x)) +
+      theme_minimal()
+  }
+}
+
+
+server <- function(input, output) {
+  # Reload the data based on Sample Size selected by user
+  dataset <- reactive({
+    diabetes[sample(nrow(diabetes), input$sampleSize),]
+  })
+
+  # Plot based on user inputs
+  output$plot <- renderPlot({
+    generatePlot(dataset(), input$x, input$y, input$color, 
+                 input$plotTypes, input$caption)
+  }, height = 500, width = 700)
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+```{r}
+# Load necessary libraries
+library(shiny)
+library(ggplot2)
+
+
+# Define UI
+ui <- fluidPage(
+  headerPanel("Data Visualization of Pima Indians Diabetes Dataset"),
+  pageWithSidebar(
+    headerPanel("Analysis of Pima Indians Diabetes Dataset"),
+    sidebarPanel(
+      h4(' The variables are as follows:'),
+      h6('1.    Pregnancies : Number of times pregnant'),
+      h6('2.    Glucose     : Plasma glucose concentration'),
+      h6('3.    BloodPressure: Diastolic blood pressure'),
+      h6('4.    SkinThickness: Triceps skinfold thickness'),
+      h6('5.    Insulin     : 2-Hour serum insulin'),
+      h6('6.    BMI         : Body mass index'),
+      h6('7.    DiabetesPedigreeFunction: Diabetes pedigree function'),
+      h6('8.    Age         : Age in years'),
+      h6('9.    Outcome     : Binary variable indicating diabetes (1) or not (0)'),
+      br(),
+
+      checkboxGroupInput('plotTypes', 'Select Plot Types', 
+                         choices = c('Scatter Plot', 'Histogram', 'Bar Chart', 'Density Plot', 'Box Plot'),
+                         selected = 'Scatter Plot'),
+      br(),
+      h4(' Select different parameters:'),
+      sliderInput('sampleSize', 'Sample Size', min = 1, max = nrow(diabetes),
+                  value = min(500, nrow(diabetes)), step = 100, round = 0),
+      selectInput('x', 'X Axis Measure', names(diabetes)),
+      selectInput('y', 'Y Axis Measure', names(diabetes)[-9]),
+      selectInput('color', 'Measure Color', c('None', names(diabetes)),
+                  names(diabetes)[[9]]),
+      textInput('caption', 'Plot Caption', value = 'Plot on Pima Indians Diabetes Dataset')
+    ),
+    mainPanel(
+      h4('Introduction & How to use'),
+      p("This dataset contains information on various health attributes and diabetes outcomes of Pima Indians."),
+      br(),
+      h4('Interactive Data Visualization'),
+      p("This Shiny application allows dynamic adjustment of plot attributes to generate visual representations of the relationships between health metrics and diabetes outcomes."),
+      br(),
+      plotOutput('plot')
+    )
+  )
+)
+
+# Function to generate plots
+generatePlot <- function(data, x, y, color, plotType, caption) {
+  if (plotType == 'Scatter Plot') {
+    ggplot(data, aes_string(x = x, y = y)) + geom_point(shape = 15, size = 3) +
+      aes_string(color = color) +
+      ggtitle(caption)
+  } else if (plotType == 'Histogram') {
+    ggplot(data, aes_string(x = x)) +
+      geom_histogram(binwidth = 1, fill = "pink", color = "black", alpha = 0.7) +
+      ggtitle(paste("Histogram of", x)) +
+      theme_minimal()
+  } else if (plotType == 'Bar Chart') {
+    ggplot(data, aes_string(x = x, fill = color)) +
+      geom_bar() +
+      ggtitle(paste("Bar Chart of", x)) +
+      theme_minimal()
+  } else if (plotType == 'Density Plot') {
+    ggplot(data, aes_string(x = x, fill = color)) +
+      geom_density() +
+      ggtitle(paste("Density Plot of", x)) +
+      scale_fill_brewer(palette = "Set 2")
+  } else if (plotType == 'Box Plot') {
+    ggplot(data, aes(x = factor(Outcome, labels = c("No Diabetes", "Diabetes")), y = .data[[y]], fill = factor(Outcome))) +
+      geom_boxplot() +
+      ggtitle(paste("Box Plot of", y, "by", x)) +
+      theme_minimal()
+  }
+}
+
+
+server <- function(input, output) {
+  # Reload the data based on Sample Size selected by user
+  dataset <- reactive({
+    diabetes[sample(nrow(diabetes), input$sampleSize),]
+  })
+
+  # Plot based on user inputs
+  output$plot <- renderPlot({
+    generatePlot(dataset(), input$x, input$y, input$color, 
+                 input$plotTypes, input$caption)
+  }, height = 500, width = 700)
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+```{r}
+# Load necessary libraries
+library(shiny)
+library(ggplot2)
+
+
+# Define UI
+ui <- fluidPage(
+  headerPanel("Data Visualization of Pima Indians Diabetes Dataset"),
+  pageWithSidebar(
+    headerPanel("Analysis of Pima Indians Diabetes Dataset"),
+    sidebarPanel(
+      h4(' The variables are as follows:'),
+      h6('1.    Pregnancies : Number of times pregnant'),
+      h6('2.    Glucose     : Plasma glucose concentration'),
+      h6('3.    BloodPressure: Diastolic blood pressure'),
+      h6('4.    SkinThickness: Triceps skinfold thickness'),
+      h6('5.    Insulin     : 2-Hour serum insulin'),
+      h6('6.    BMI         : Body mass index'),
+      h6('7.    DiabetesPedigreeFunction: Diabetes pedigree function'),
+      h6('8.    Age         : Age in years'),
+      h6('9.    Outcome     : Binary variable indicating diabetes (1) or not (0)'),
+      br(),
+
+      checkboxGroupInput('plotTypes', 'Select Plot Types', 
+                         choices = c('Scatter Plot', 'Histogram', 'Bar Chart', 'Density Plot', 'Box Plot'),
+                         selected = 'Scatter Plot'),
+      br(),
+      h4(' Select different parameters:'),
+      sliderInput('sampleSize', 'Sample Size', min = 1, max = nrow(diabetes),
+                  value = min(500, nrow(diabetes)), step = 100, round = 0),
+      selectInput('x', 'X Axis Measure', names(diabetes)),
+      selectInput('y', 'Y Axis Measure', names(diabetes)[-9]),
+      selectInput('color', 'Measure Color', c('None', names(diabetes)),
+                  names(diabetes)[[9]]),
+      textInput('caption', 'Plot Caption', value = 'Plot on Pima Indians Diabetes Dataset')
+    ),
+    mainPanel(
+      h4('Introduction & How to use'),
+      p("This dataset contains information on various health attributes and diabetes outcomes of Pima Indians."),
+      br(),
+      h4('Interactive Data Visualization'),
+      p("This Shiny application allows dynamic adjustment of plot attributes to generate visual representations of the relationships between health metrics and diabetes outcomes."),
+      br(),
+      plotOutput('plot')
+    )
+  )
+)
+
+# Function to generate plots
+generatePlot <- function(data, x, y, color, plotType, caption) {
+  if (plotType == 'Scatter Plot') {
+    ggplot(data, aes_string(x = x, y = y)) + geom_point(shape = 15, size = 3) +
+      aes_string(color = color) +
+      ggtitle(caption)
+  } else if (plotType == 'Histogram') {
+    ggplot(data, aes_string(x = x)) +
+      geom_histogram(binwidth = 1, fill = "pink", color = "black", alpha = 0.7) +
+      ggtitle(paste("Histogram of", x)) +
+      theme_minimal()
+  } else if (plotType == 'Bar Chart') {
+    ggplot(data, aes_string(x = x, fill = color)) +
+      geom_bar() +
+      ggtitle(paste("Bar Chart of", x)) +
+      theme_minimal()
+  } #Distribution of attributes
+  else if (plotType == 'Density Plot') { 
+    ggplot(data, aes_string(x = x, fill = color)) +
+      geom_density() +
+      ggtitle(paste("Density Plot of", x)) +
+      scale_fill_brewer(palette = "Set 2")
+  } #Distribution of attributes
+  else if (plotType == 'Box Plot') {
+    ggplot(data, aes(x = factor(Outcome, labels = c("No Diabetes", "Diabetes")), y = .data[[y]], fill = factor(Outcome))) +
+      geom_boxplot() +
+      ggtitle(paste("Box Plot of", y, "by Outcome")) +
+      facet_wrap(~ names(data)[-9], scales = 'free_y', ncol = 3) +
+      theme_minimal()
+  }
+}
+
+
+server <- function(input, output) {
+  # Reload the data based on Sample Size selected by user
+  dataset <- reactive({
+    diabetes[sample(nrow(diabetes), input$sampleSize),]
+  })
+
+  # Plot based on user inputs
+  output$plot <- renderPlot({
+    generatePlot(dataset(), input$x, input$y, input$color, 
+                 input$plotTypes, input$caption)
+  }, height = 500, width = 700)
+}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+
+
+
+
