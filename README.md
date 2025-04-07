@@ -1,7 +1,7 @@
 - 👋 Hi, I’m @SelenaHuynh
 - 👀 I’m interested in coding and data visualization
-- 🌱 I’m currently learning Python and Power BI 
-- 📫 How to reach me selenaminh01@gmail.com
+- 🌱 I’m currently learning Python, R, SAS and Power BI 
+- 📫 How to reach me selenahuynh1111@gmail.com
 
 Above is all of my projects that I have been working on, from doing Explatonary Descriptive Analysis (EDA) to R, SAS and Data Visualization and some of my coding on Python as well.
 
