@@ -1,3 +1,5 @@
+<img width="3189" height="579" alt="image" src="https://github.com/user-attachments/assets/710cf4b9-c03c-4994-9d79-8a2297572102" />
+
 - 👋 Hello, I’m @SelenaHuynh
 - 👀 I’m interested in coding and visualize data
 - 🌱 I’m currently learning Python, R, SAS, Tableau and Power BI 
