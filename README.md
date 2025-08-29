@@ -16,9 +16,10 @@ Data analysis and reporting using Google Sheets and Excel.
 - Visualization: Power BI, Tableau, Looker Studio
 
 📫 **How to reach me** 
+
 selenahuynh1111@gmail.com
 
-[LinkedIn](https://www.linkedin.com/in/minh-phuong-huynh-608b0b197/in/SelenaHuynh)
+[LinkedIn](https://www.linkedin.com/in/minh-phuong-huynh-608b0b197)
 
 Above is all of my projects that I have been working on, from doing Explatonary Descriptive Analysis (EDA) to R, SAS and Data Visualization and some of my coding on Python to analyse trends/patterns to predict short term objective as well.
 
