@@ -2,7 +2,7 @@
 
 👋 Hi there, I’m @SelenaHuynh — a Data Analyst passionate about turning raw data into meaningful insights. My expertise spans data analysis and reporting, query optimization, database architecture, and data modeling.
 
-🌱 
+🌱 **Skills Overview**
 
 - Skilled in extracting and manipulating data using SQL for report generation and ad-hoc analysis
 - Experienced in building interactive dashboards with Tableau and Looker Studio
