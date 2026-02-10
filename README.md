@@ -11,7 +11,7 @@
 
 👀 **Projects**
 
-Dive into the [projects](https://www.linkedin.com/in/minh-phuong-huynh-608b0b197) that define my journey in tech and data science.
+Dive into the [projects]([https://www.linkedin.com/in/minh-phuong-huynh-608b0b197](https://github.com/SelenaHuynh?tab=repositories)) that define my journey in tech and data science.
 
 
 🛠️ **Tools**
