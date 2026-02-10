@@ -11,7 +11,7 @@
 
 👀 **Projects**
 
-Dive into the [projects]((https://github.com/SelenaHuynh?tab=repositories)) that define my journey in tech and data science.
+Dive into the [projects](https://github.com/SelenaHuynh?tab=repositories) that define my journey in tech and data science.
 
 
 🛠️ **Tools**
